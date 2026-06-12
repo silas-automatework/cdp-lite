@@ -129,11 +129,21 @@ async function startCommand(argv) {
     args.push('--headless=new');
   }
 
-  spawn(chromePath, args, { detached: true, stdio: 'ignore' }).unref();
+  if (process.env.CDP_LITE_CHROME_ARGS) {
+    args.push(...process.env.CDP_LITE_CHROME_ARGS.split(/\s+/).filter(Boolean));
+  }
+
+  const logPath = path.join(userDataDir, 'chrome.log');
+  const logFd = fs.openSync(logPath, 'w');
+  spawn(chromePath, args, { detached: true, stdio: ['ignore', logFd, logFd] }).unref();
+  fs.closeSync(logFd);
 
   const ok = await waitForBrowser(browserUrl(port));
   if (!ok) {
-    throw new Error(`Chrome did not become ready on ${browserUrl(port)}`);
+    throw new Error(
+      `Chrome did not become ready on ${browserUrl(port)}. See ${logPath}. ` +
+        'In containers/CI, try CDP_LITE_CHROME_ARGS="--no-sandbox --disable-dev-shm-usage".'
+    );
   }
 
   console.log(`Chrome started on ${browserUrl(port)}${headless ? ' (headless)' : ''}`);
@@ -396,7 +406,7 @@ async function canConnect(url) {
 }
 
 async function waitForBrowser(url) {
-  for (let i = 0; i < 30; i += 1) {
+  for (let i = 0; i < 60; i += 1) {
     if (await canConnect(url)) return true;
     await sleep(500);
   }

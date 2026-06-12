@@ -17,6 +17,8 @@ jobs:
       - run: node cdp-lite.js --help
       - name: headless end-to-end smoke
         # ubuntu-latest runners ship Google Chrome preinstalled; cdp-lite auto-detects it
+        env:
+          CDP_LITE_CHROME_ARGS: --no-sandbox --disable-dev-shm-usage
         run: |
           node cdp-lite.js start --headless
           node cdp-lite.js nav "data:text/html,<title>cdp-lite</title>"

@@ -61,6 +61,10 @@ the most recent one).
 | `CDP_LITE_BROWSER_URL` | Full DevTools URL of an already-running Chrome |
 | `CDP_LITE_USER_DATA_DIR` | User data dir for `start` |
 | `CDP_LITE_PROFILE_SOURCE` | Profile dir copied by `start --profile` |
+| `CDP_LITE_CHROME_ARGS` | Extra Chrome flags for `start` (e.g. `--no-sandbox --disable-dev-shm-usage` in containers/CI) |
+
+`start` writes Chrome's output to `<user-data-dir>/chrome.log` — check it when Chrome fails to
+come up.
 
 `start --profile` copies your default Chrome profile into `~/.cache/cdp-lite/profile` so the
 debug instance has your cookies/logins without locking your main profile.
