@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: node cdp-lite.js --help
+      - name: headless end-to-end smoke
+        run: |
+          sudo apt-get update && sudo apt-get install -y chromium-browser
+          export CHROME_PATH="$(which chromium-browser)"
+          node cdp-lite.js start --headless
+          node cdp-lite.js nav "data:text/html,<title>cdp-lite</title>"
+          [ "$(node cdp-lite.js eval 'document.title')" = "cdp-lite" ]
+          node cdp-lite.js screenshot --path /tmp/smoke.png
+          test -s /tmp/smoke.png

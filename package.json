@@ -1,0 +1,28 @@
+{
+  "name": "cdp-lite",
+  "version": "0.1.0",
+  "description": "Minimal Chrome DevTools Protocol CLI — start, nav, eval, screenshot, pick, cookies. Built for coding agents; no MCP server required.",
+  "bin": {
+    "cdp-lite": "./cdp-lite.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "puppeteer-core": "^24.35.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silas-automatework/cdp-lite.git"
+  },
+  "keywords": [
+    "chrome",
+    "cdp",
+    "devtools",
+    "puppeteer",
+    "agents",
+    "cli"
+  ],
+  "author": "Automatework",
+  "license": "MIT"
+}
