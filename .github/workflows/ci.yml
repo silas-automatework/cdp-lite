@@ -16,9 +16,8 @@ jobs:
       - run: npm install
       - run: node cdp-lite.js --help
       - name: headless end-to-end smoke
+        # ubuntu-latest runners ship Google Chrome preinstalled; cdp-lite auto-detects it
         run: |
-          sudo apt-get update && sudo apt-get install -y chromium-browser
-          export CHROME_PATH="$(which chromium-browser)"
           node cdp-lite.js start --headless
           node cdp-lite.js nav "data:text/html,<title>cdp-lite</title>"
           [ "$(node cdp-lite.js eval 'document.title')" = "cdp-lite" ]
